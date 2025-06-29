@@ -37,7 +37,7 @@ def linear_complexity_test(binary, M=512, K=6):
     )[0][::-1]  # take first tuple and reverse it
 
     # compute chisq using V and given probabilities for K=6
-    pis = [0.010417, 0.03125, 0.125, 0.5, 0.25, 0.0625, 0.020833]
+    pis = [0.01047, 0.03125, 0.125, 0.5, 0.25, 0.0625, 0.020833]
     chisq = sum(np.array([
         (v-(N*pis[i]))**2 / (N*pis[i]) for i, v in enumerate(vs) if i < 7
     ]))

@@ -17,8 +17,10 @@ def cumulative_sums_test(binary, mode=0):
 
         return norm.cdf(t1) - norm.cdf(t2)
 
+    bin = binary.unpacked if mode == 0 else binary.unpacked[::-1]
+
     # convert to binary then to -1/1 for this test
-    bits = 2*binary.unpacked.astype(np.int16) - 1
+    bits = 2*bin.astype(np.int16) - 1
     n = binary.n
 
     # compute cumulative sums - may require large amount of memory/time
@@ -37,3 +39,9 @@ def cumulative_sums_test(binary, mode=0):
     success = (p >= 0.01)
 
     return [p, success]
+
+def cumulative_sums_forward_test(binary):
+    return cumulative_sums_test(binary, mode=0)
+
+def cumulative_sums_backward_test(binary):
+    return cumulative_sums_test(binary, mode=1)

@@ -62,7 +62,7 @@ class TRNGtester:
                     non_overlapping_template_matching_test,
                     overlapping_template_matching_test, maurers_universal_test, 
                     linear_complexity_test,
-                    serial_test, approximate_entropy_test, cumulative_sums_test, random_excursion_test, random_excursion_variant_test
+                    serial_test, approximate_entropy_test, cumulative_sums_forward_test, cumulative_sums_backward_test, random_excursion_test, random_excursion_variant_test
         ]
 
         for func in nistFuncs:

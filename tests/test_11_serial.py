@@ -2,7 +2,6 @@ import numpy as np
 import scipy.special as ss
 import multiprocessing as mp
 import math
-from functools import partial
 from itertools import repeat
 from multiprocessing.dummy import Pool as ThreadPool
 
@@ -29,8 +28,8 @@ def serial_test(binary):
     dpsi  = psisqs[0] - psisqs[1]
     d2psi = psisqs[0] - 2*psisqs[1] + psisqs[2]
 
-    p1 = ss.gammainc(2**(M-2), dpsi/2)
-    p2 = ss.gammainc(2**(M-3), d2psi/2)
+    p1 = ss.gammaincc(2**(M-2), dpsi/2)
+    p2 = ss.gammaincc(2**(M-3), d2psi/2)
 
     success1 = p1 >= 0.01
     success2 = p2 >= 0.01
@@ -38,15 +37,18 @@ def serial_test(binary):
     return [p1, success1, p2, success2]
 
 def sliding_window(x, m):
-    micounts = np.zeros(2**(16), dtype=np.int64)
+    # NIST implementation operates on the sequence as cyclical
+    x = np.concatenate([x, x[:m - 1]])
+
+    micounts = np.zeros(2**m, dtype=np.int64)
     strides = np.lib.stride_tricks.sliding_window_view(x, window_shape=m)
     mask = np.array(1 << np.arange(m), dtype=np.uint16)[::-1]
     
     strides = np.array_split(strides, math.ceil(len(strides) / 1_000_000))
-    
+
     with ThreadPool(mp.cpu_count()) as p:
         repacked = [*p.starmap(np.matmul, zip(strides, repeat(mask)))]
-        counts = np.vstack([np.pad(c, [0, 2**16 - len(c)]) for c in p.imap(np.bincount, repacked)])
+        counts = np.vstack([np.pad(c, [0, 2 ** m - len(c)]) for c in p.imap(np.bincount, repacked)])
         counts = np.sum(counts, axis=0)
         micounts[range(len(counts))] += counts
 

@@ -9,6 +9,7 @@ def random_excursion_variant_test(binary):
     s = s[(s >= -9) & (s <= 9)]
 
     num, counts = np.unique(s, return_counts=True)
+    num = num.astype(np.int32)
 
     # compute p value for each class (18 total classes)
     ps = []

@@ -6,12 +6,13 @@ import scipy.special as ss
 from scipy.stats import chisquare
 import math
 
-def discrete_fourier_transform_test(binary, m=1):
+# `advanced` flag probably related to https://link.springer.com/article/10.1007/s11432-018-9489-x`
+def discrete_fourier_transform_test(binary, m=1, advanced=False):
 
     bits = 2*binary.unpacked.astype(np.int8) - 1
 
     # two-level test for bitstreams that are too large
-    if binary.n > 10_000_000:
+    if advanced and binary.n > 10_000_000:
         m = 1000
     
     blockSize = binary.n // m
@@ -28,6 +29,10 @@ def discrete_fourier_transform_test(binary, m=1):
 
     # compute proportion of p-values that pass
     p = np.array([math.erfc(abs(di)/math.sqrt(2)) for di in d])
+
+    if (not advanced):
+        return [p[0], p[0] >= 0.01]
+
     alpha = 0.01
     mean  = 1.0 - alpha
     std   = math.sqrt((alpha*mean / m))
@@ -42,8 +47,6 @@ def discrete_fourier_transform_test(binary, m=1):
     # perform chisq test on computed p-values
     chsq, uniformityp = chisquare(p, ddof=10)
     pt = ss.gammainc(10/2,chsq/2)
-
-    success = (p >= 0.01)
 
     return [prop, propPass, pt, pt >= 0.0001]
 

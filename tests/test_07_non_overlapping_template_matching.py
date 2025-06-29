@@ -6,7 +6,7 @@ from functools import partial
 from itertools import repeat
 import math
 
-def non_overlapping_template_matching_test(binary, B=1, m=9):
+def non_overlapping_template_matching_test(binary, m=9, advanced = False):
     
     def template_matches(block, template):
         strides = np.packbits(np.lib.stride_tricks.as_strided(block, shape=((block.size - m + 1), m), strides=(1,1)), axis=1).view(np.uint16).reshape(-1)
@@ -19,14 +19,25 @@ def non_overlapping_template_matching_test(binary, B=1, m=9):
     n = len(bits)
     M = n // 8
     N = n // M
-    
+
+    mu = (M - m + 1) / (2 ** m)
+    std = M * ((1 / (2 ** m)) - (2 * m - 1) / (2 ** (2 * m)))
+
+    blocks = bits[:N * M].reshape(N, M)
+
+    if not advanced:
+        template = np.uint16(2**(m-1))
+        matches = non_overlapping_matches(blocks, m, template)
+        chisq = np.sum(((matches - mu) ** 2) / std)
+        p = ss.gammaincc(N / 2, chisq / 2)
+        return [p, (p >= 0.01)]
+
     numTemplates = 148
     templateRange = np.arange(2**m,dtype=np.uint16)
     templates = np.random.choice(templateRange,size=numTemplates).reshape(-1,1)
 
-    blocks = bits[:N*M].reshape(N,M)
-
     results = []
+
     for template in templates:
 
         template = np.unpackbits(template.view(np.uint8))[16-m:]
@@ -47,19 +58,18 @@ def non_overlapping_template_matching_test(binary, B=1, m=9):
 
         matches = non_overlapping_matches(blocks, m, template)
 
-        mu = (M - m + 1) / (2**m)
-        std = M * ((1/(2**m))- (2*m-1)/(2**(2*m)))
-        
         chisq = np.sum(((matches - mu)**2) / std)
 
         p = ss.gammaincc(N/2, chisq/2)
         
         success = (p >= 0.01)
         results.append([p,success])
-    
-    ret = sum([r[1] for r in results])
-    ret = [[ret, True],[numTemplates-ret,False]]
-    return ret
+
+        ret = sum([r[1] for r in results])
+        ret = [[ret, True],[numTemplates-ret,False]]
+        return ret
+
+    return results[0]
 
 def non_overlapping_matches(block, m, template):
     strides = np.lib.stride_tricks.sliding_window_view(block, window_shape=m, axis=1)

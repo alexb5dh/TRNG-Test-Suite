@@ -11,6 +11,6 @@ from .test_09_maurers_universal_statistical import maurers_universal_test
 from .test_10_linear_complexity import linear_complexity_test
 from .test_11_serial import serial_test
 from .test_12_approximate_entropy import approximate_entropy_test
-from .test_13_cumulative_sums import cumulative_sums_test
+from .test_13_cumulative_sums import cumulative_sums_test, cumulative_sums_forward_test, cumulative_sums_backward_test
 from .test_14_random_excursions import random_excursion_test
 from .test_15_random_excursions_variant import random_excursion_variant_test
