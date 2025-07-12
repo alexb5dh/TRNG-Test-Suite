@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def monobit_test(binary):
+def monobit_test(binary, sigLevel=0.01):
     """ Tests the proportion of 1s to 0s in the entire binary sequence.
 
     Returns:
@@ -20,6 +20,6 @@ def monobit_test(binary):
     s = sum2 - binary.n if sum2 > binary.n else binary.n - sum2
 
     p = math.erfc(s/(math.sqrt(float(binary.n))*math.sqrt(2.0)))
-    success = p >= 0.01
+    success = p >= sigLevel
 
     return [p, success]

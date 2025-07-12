@@ -5,7 +5,7 @@ import math
 from itertools import repeat
 from multiprocessing.dummy import Pool as ThreadPool
 
-def serial_test(binary):
+def serial_test(binary, sigLevel=0.01):
     """ The focus of this test is the frequency of all possible overlapping m-bit
         patterns across the entire sequence.
 
@@ -31,8 +31,8 @@ def serial_test(binary):
     p1 = ss.gammaincc(2**(M-2), dpsi/2)
     p2 = ss.gammaincc(2**(M-3), d2psi/2)
 
-    success1 = p1 >= 0.01
-    success2 = p2 >= 0.01
+    success1 = p1 >= sigLevel
+    success2 = p2 >= sigLevel
 
     return [p1, success1, p2, success2]
 

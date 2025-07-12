@@ -6,7 +6,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 from functools import partial
 from itertools import repeat
 
-def approximate_entropy_test(binary):
+def approximate_entropy_test(binary, sigLevel=0.01):
     """ As with the Serial test, the focus of this test is the
         frequency of all possible overlapping m-bit patterns across
         the entire sequence.
@@ -32,7 +32,7 @@ def approximate_entropy_test(binary):
 
     p = ss.gammaincc(2**(M-1), chisq/2)
 
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
 
     return [p, success]
     

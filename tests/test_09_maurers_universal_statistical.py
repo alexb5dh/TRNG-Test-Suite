@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 
-def maurers_universal_test(binary):
+def maurers_universal_test(binary, sigLevel=0.01):
     bits = binary.unpacked
     n = binary.n
 
@@ -79,6 +79,6 @@ def maurers_universal_test(binary):
     stat = abs((fn - EV)) / (math.sqrt(2)*sigma)
     p = math.erfc(stat)
 
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
 
     return [p, success]

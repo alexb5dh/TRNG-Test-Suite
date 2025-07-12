@@ -5,7 +5,7 @@ import numpy as np
 import multiprocessing as mp
 import scipy.special as ss
 
-def overlapping_template_matching_test(binary, m=9, K=5):
+def overlapping_template_matching_test(binary, sigLevel=0.01, m=9, K=5):
 
         def get_prob(u, x):
             out = 1.0 * np.exp(-x)
@@ -37,7 +37,7 @@ def overlapping_template_matching_test(binary, m=9, K=5):
 
         p = ss.gammaincc(K/2, chisq/2)
 
-        success = (p >= 0.01)
+        success = (p >= sigLevel)
         
         return [p, success]
 

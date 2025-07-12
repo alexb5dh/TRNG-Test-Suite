@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 import math
 
-def cumulative_sums_test(binary, mode=0):
+def cumulative_sums_test(binary, sigLevel=0.01, mode=0):
     """ The focus of this test is the maximal excursion (from zero) of the random walk defined 
         by the cumulative sum of adjusted (-1, +1) digits in the sequence.  
     
@@ -36,7 +36,7 @@ def cumulative_sums_test(binary, mode=0):
     s2 = np.sum(compute_psummation_func(s2range, +3, +1))
 
     p = 1 - s1 + s2
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
 
     return [p, success]
 

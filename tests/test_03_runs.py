@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def runs_test(binary):
+def runs_test(binary, sigLevel=0.01):
     """
         This tests the "oscillation" of the sequence,
         i.e. how much it switches from 1->0 and 0->1.
@@ -17,6 +17,6 @@ def runs_test(binary):
     vobs = 1 + np.sum(binary.unpacked[:-1] ^ binary.unpacked[1:])
     p = math.erfc(abs(vobs-(2.0*binary.n*prop*(1.0-prop)))/(2.0*math.sqrt(2.0*binary.n)*prop*(1-prop)))
 
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
 
     return [p, success]

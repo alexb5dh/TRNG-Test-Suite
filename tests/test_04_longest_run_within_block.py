@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.special as ss
 
-def longest_run_within_block_test(binary):
+def longest_run_within_block_test(binary, sigLevel=0.01):
     """
         Like longest run test, but within blocks of the binary string.
     """
@@ -51,6 +51,6 @@ def longest_run_within_block_test(binary):
 
     p = ss.gammaincc(K/2, chisq/2)
 
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
 
     return [p, success]

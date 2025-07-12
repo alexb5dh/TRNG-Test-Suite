@@ -6,7 +6,7 @@ from functools import partial
 from itertools import repeat
 import math
 
-def non_overlapping_template_matching_test(binary, m=9, advanced = False):
+def non_overlapping_template_matching_test(binary, sigLevel=0.01, m=9, advanced = False):
     
     def template_matches(block, template):
         strides = np.packbits(np.lib.stride_tricks.as_strided(block, shape=((block.size - m + 1), m), strides=(1,1)), axis=1).view(np.uint16).reshape(-1)
@@ -30,7 +30,7 @@ def non_overlapping_template_matching_test(binary, m=9, advanced = False):
         matches = non_overlapping_matches(blocks, m, template)
         chisq = np.sum(((matches - mu) ** 2) / std)
         p = ss.gammaincc(N / 2, chisq / 2)
-        return [p, (p >= 0.01)]
+        return [p, (p >= sigLevel)]
 
     numTemplates = 148
     templateRange = np.arange(2**m,dtype=np.uint16)
@@ -62,7 +62,7 @@ def non_overlapping_template_matching_test(binary, m=9, advanced = False):
 
         p = ss.gammaincc(N/2, chisq/2)
         
-        success = (p >= 0.01)
+        success = (p >= sigLevel)
         results.append([p,success])
 
         ret = sum([r[1] for r in results])

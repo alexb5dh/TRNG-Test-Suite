@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.special as ss
 
-def random_excursion_test(binary):
+def random_excursion_test(binary, sigLevel=0.01):
 
     def get_probability(x, k):
         pi = 0
@@ -45,4 +45,4 @@ def random_excursion_test(binary):
 
     ps = [ss.gammaincc(5/2, chisq/2) for chisq in chisqs]
 
-    return [(p, p >= 0.01) for p in ps]
+    return [(p, p >= sigLevel) for p in ps]

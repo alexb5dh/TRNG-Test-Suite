@@ -7,7 +7,7 @@ from scipy.stats import chisquare
 import math
 
 # `advanced` flag probably related to https://link.springer.com/article/10.1007/s11432-018-9489-x`
-def discrete_fourier_transform_test(binary, m=1, advanced=False):
+def discrete_fourier_transform_test(binary, sigLevel=0.01, m=1, advanced=False):
 
     bits = 2*binary.unpacked.astype(np.int8) - 1
 
@@ -31,7 +31,7 @@ def discrete_fourier_transform_test(binary, m=1, advanced=False):
     p = np.array([math.erfc(abs(di)/math.sqrt(2)) for di in d])
 
     if (not advanced):
-        return [p[0], p[0] >= 0.01]
+        return [p[0], p[0] >= sigLevel]
 
     alpha = 0.01
     mean  = 1.0 - alpha

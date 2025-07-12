@@ -3,7 +3,7 @@ import multiprocessing as mp
 from multiprocessing.dummy import Pool as ThreadPool
 
 
-def binary_matrix_rank_test(binary, M=32, Q=32):
+def binary_matrix_rank_test(binary, sigLevel=0.01, M=32, Q=32):
     """The focus of the test is the rank of disjoint sub-matrices of the entire sequence.  
         This test checks for linear dependence among fixed length substrings of the original sequence.
 
@@ -53,7 +53,7 @@ def binary_matrix_rank_test(binary, M=32, Q=32):
     chisq = (((FM - pFM*N)**2) / (pFM*N)) + (((FMM - pFMM*N)**2) / (pFMM*N)) + (((rem - prem*N)**2) / (prem*N))
     p = np.exp(-chisq/2)
 
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
     
     return [p, success]
 

@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def random_excursion_variant_test(binary):
+def random_excursion_variant_test(binary, sigLevel=0.01):
     bits = 2*binary.unpacked.astype(np.int8)-1
 
     s = np.add.accumulate(bits, dtype=np.int16)
@@ -18,4 +18,4 @@ def random_excursion_variant_test(binary):
             p = math.erfc(abs(c-J)/math.sqrt(2*J*(4*abs(num)-2)))
             ps.append(p)
 
-    return [(p, p >= 0.01) for p in ps]
+    return [(p, p >= sigLevel) for p in ps]

@@ -7,7 +7,7 @@ def init_pool(data):
     global blocks
     blocks = data
 
-def linear_complexity_test(binary, M=512, K=6):
+def linear_complexity_test(binary, sigLevel=0.01, M=512, K=6):
     
     blocksize = M // 8
     bytes = binary.packed
@@ -43,7 +43,7 @@ def linear_complexity_test(binary, M=512, K=6):
     ]))
 
     p = ss.gammaincc(K/2, chisq/2)
-    success = (p >= 0.01)
+    success = (p >= sigLevel)
 
     # shr.close()
     # shr.unlink()
