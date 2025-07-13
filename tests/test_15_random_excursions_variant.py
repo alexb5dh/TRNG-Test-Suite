@@ -12,10 +12,14 @@ def random_excursion_variant_test(binary, sigLevel=0.01):
     num = num.astype(np.int32)
 
     # compute p value for each class (18 total classes)
-    ps = []
-    for num, c in zip(num, counts):
-        if num != 0:
-            p = math.erfc(abs(c-J)/math.sqrt(2*J*(4*abs(num)-2)))
-            ps.append(p)
+    ps = np.zeros(18) - 1
+    for n, c in zip(num, counts):
+        if n != 0:
+            ps[n + 9 if n < 0 else n + 8] = math.erfc(abs(c-J)/math.sqrt(2*J*(4*abs(n)-2)))
+
+    for i, p in enumerate(ps):
+        if p == -1:
+            n = i - 9 if i < 9 else i - 8
+            ps[i] = math.erfc(abs(0-J)/math.sqrt(2*J*(4*abs(n)-2)))
 
     return [(p, p >= sigLevel) for p in ps]
