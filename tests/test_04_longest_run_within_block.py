@@ -19,7 +19,7 @@ def longest_run_within_block_test(binary, sigLevel=0.01):
 
     if n < 128:
         print("ERROR! Not enough data to run this test. (Longest run within block test)")
-        return -1
+        return [-1.0, False]
     elif n < 6272:
         K, M = 3, 8
         vclasses = [1, 2, 3, 4]

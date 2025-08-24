@@ -37,7 +37,7 @@ def maurers_universal_test(binary, sigLevel=0.01):
     EV = _EV[L - 6]
 
     if L == 5:
-        return -1
+        return [-1.0, False]
     Q = 10 * (2**L)
     K = (n // L) - Q
 
