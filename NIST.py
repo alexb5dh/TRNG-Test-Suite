@@ -23,7 +23,7 @@ class TRNGtester:
 
     class BinaryData:
         def __init__(self, filename, bits=-1, binformat='bytes'):
-            if filename.endswith(".txt") or binformat != 'bytes': 
+            if binformat != 'bytes':
                 lines = open(filename).readlines()
                 rawData = ''.join(lines).replace('\n','').replace(' ','').replace('\t','')
                 n = bits // 8 if bits != -1 else len(rawData) // 8
