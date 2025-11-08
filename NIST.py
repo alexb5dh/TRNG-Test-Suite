@@ -30,6 +30,11 @@ class TRNGtester:
                 self.packed = np.array([int(rawData[i*8:(i+1)*8], 2) for i in range(n)],dtype=np.uint8)
             else:
                 self.packed = np.fromfile(filename, dtype=np.uint8, count=bits//8)
+                # Pad with zeros to make byte count divisible by 8
+                remainder = len(self.packed) % 8
+                if remainder != 0:
+                    padding_size = 8 - remainder
+                    self.packed = np.concatenate([self.packed, np.zeros(padding_size, dtype=np.uint8)])
 
             self.unpacked = np.unpackbits(self.packed)
             self.n = len(self.packed) * 8
